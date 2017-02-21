@@ -12,6 +12,8 @@
       findPanel: function() {},
       panelLabel: 'Panel',
       mode: 'slide',
+      customShow: function() {},
+      customHide: function() {},
       autoFocus: true,
       selfClose: true,
       returnFocus: true,
@@ -87,8 +89,8 @@
 
         case 'function':
 
-          // If panel equals to 'function', it needs findPanel setting which
-          // must returns the content panel.
+          // If panel equals to function, it needs findPanel setting which must
+          // returns the content panel.
           plugin.settings.$panel = plugin.settings.findPanel($trigger);
 
           if (!plugin.settings.$panel.length) {
@@ -153,19 +155,32 @@
       plugin.settings.$panel
         .attr('aria-hidden', 'false');
 
+      switch(plugin.settings.mode) {
+
+        case 'slide' :
+
       // Slide FX
-      if (plugin.settings.mode == 'slide')
-      {
         plugin.settings.$panel.slideDown('fast', function() {
           $(this).addClass(plugin.settings.prefix + '-is-opened');
           plugin.settings.onShowEnd();
         });
-      }
 
-      // Toggle FX
-      if (plugin.settings.mode == 'toggle')
-      {
+        break;
+
+        case 'toggle' :
+          plugin.settings.$panel.addClass(plugin.settings.prefix + '-is-opened');
+        break;
+
+        case 'custom' :
+
+          // If "mode" setting equals to "custom", it needs customShow setting.
         plugin.settings.$panel.addClass(plugin.settings.prefix + '-is-opened');
+          plugin.settings.customShow(plugin.settings.$panel, $trigger);
+
+          break;
+
+        default:
+          console.log('Unknow mode.');
       }
 
       // Move focus to panel
@@ -199,23 +214,34 @@
       plugin.settings.$panel
         .attr('aria-hidden', 'true');
 
+
+      switch(plugin.settings.mode) {
+
+        case 'slide' :
+
       // Slide FX
-      if ( plugin.settings.mode == 'slide' )
-      {
         plugin.settings.$panel.slideUp('fast', function() {
           $(this).removeClass(plugin.settings.prefix + '-is-opened');
-          plugin.settings.onHideEnd();
+            plugin.settings.onShowEnd();
         });
-      }
 
+        break;
 
-      // Toggle FX
-      if ( plugin.settings.mode == 'toggle' )
-      {
+        case 'toggle' :
         plugin.settings.$panel.removeClass(plugin.settings.prefix + '-is-opened');
+        break;
+
+        case 'custom' :
+
+          // If "mode" setting equals to "custom", it needs customShow setting.
+          plugin.settings.$panel.removeClass(plugin.settings.prefix + '-is-opened');
+          plugin.settings.customHide(plugin.settings.$panel, $trigger);
+
+          break;
+
+        default:
+          console.log('Unknow mode.');
       }
-
-
 
       // Callback function
       plugin.settings.onHide( plugin.settings.$panel, $trigger );
