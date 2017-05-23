@@ -16,7 +16,7 @@ Plugin jQuery - Afficher un élément aprés un évènement sur un autre éléme
 ### 1. Join plugin
 
 ```html
-<script src="js/jquery.toggle-panel"></script>
+<script src="js/jquery.toggle-panel.js"></script>
 ```
 
 ```html
@@ -32,11 +32,39 @@ Plugin jQuery - Afficher un élément aprés un évènement sur un autre éléme
 ### 2. JavaScript
 
 ```js
+
+var openLabel = 'Déplier';
+var closeLabel = 'Replier';
+
 // Toggle panel.
 $('#trigger').togglePanel({
   panel: 'id',
   autoFocus: false,
-  panelLabel: 'Recherche'
+  panelLabel: 'Recherche',
+  onShow: function($panel, $trigger) {
+
+    // A11y : Update title & aria.
+    var btnText = " '" + $trigger.prev().text() + "'";
+
+    // Add title / aria-label.
+    $trigger.attr({
+      'aria-label' : closeLabel + btnText,
+      'title': closeLabel + btnText
+    });
+
+  },
+  onHide: function($panel, $trigger) {
+
+    // A11y : Update title & aria.
+    var btnText = " '" + $trigger.prev().text() + "'";
+
+    // Add title / aria-label.
+    $trigger.attr({
+      'aria-label' : openLabel + btnText,
+      'title': openLabel + btnText
+    });
+
+  }
 });
 ```
 

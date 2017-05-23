@@ -10,7 +10,7 @@
       connect: false,
       panel: 'next',
       findPanel: function() {},
-      panelLabel: 'Panel',
+      panelLabel: '',
       mode: 'slide',
       customShow: function() {},
       customHide: function() {},
@@ -41,13 +41,16 @@
       // Get first focusable element.
       plugin.settings.focusableElementsFirst = plugin.settings.$panel.find('a, :input').first();
 
+      // Small screen (mobile).
+      plugin.settings.isSmallScreen = false;
+      if (window.innerWidth <= 767)
+        plugin.settings.isSmallScreen = true;
 
       initAttributes();
       attachEvents();
 
-      // Open panels.
-      if ($trigger.data('tgp-opened'))
-      {
+      // Open panels (stay closed on small screens).
+      if ($trigger.data('tgp-opened') && plugin.settings.isSmallScreen === false) {
         plugin.settings.$panel
           .trigger('show.tgp');
       }
@@ -122,19 +125,22 @@
     /** Insert ARIA & classes attributes */
     var initAttributes = function() {
 
-      // Add classes
+      // Add classes.
       $trigger.addClass(plugin.settings.prefix +'-trigger');
       plugin.settings.$panel.addClass(plugin.settings.prefix +'-panel');
 
       if (plugin.settings.wrapper.length)
         plugin.settings.wrapper.addClass(plugin.settings.prefix +'-wrapper');
 
-
-      // Add attributes
+      // Add attributes.
       $trigger.attr({
         'aria-expanded' : false,
-        'aria-controls' : plugin.settings.$panel.attr('id'),
+        'aria-controls' : plugin.settings.$panel.attr('id')
       });
+
+
+      if ( ! plugin.settings.panelLabel)
+        plugin.settings.panelLabel = $trigger.text();
 
       plugin.settings.$panel.attr({
         'aria-hidden' : true,
@@ -147,11 +153,11 @@
     /** Shows the panel */
     var showPanel = function() {
 
-      // Active trigger
+      // Active trigger.
       $trigger.addClass( plugin.settings.prefix +'-trigger--is-active' )
         .attr('aria-expanded', true);
 
-      // Show panel
+      // Show panel.
       plugin.settings.$panel
         .attr('aria-hidden', 'false');
 
@@ -159,7 +165,7 @@
 
         case 'slide' :
 
-      // Slide FX
+        // Slide FX.
         plugin.settings.$panel.slideDown('fast', function() {
           $(this).addClass(plugin.settings.prefix + '-is-opened');
           plugin.settings.onShowEnd();
@@ -183,12 +189,12 @@
           console.log('Unknow mode.');
       }
 
-      // Move focus to panel
+      // Move focus to panel.
       if (plugin.settings.autoFocus) {
         plugin.settings.focusableElementsFirst.focus();
       }
 
-      // Callback function
+      // Callback function.
       plugin.settings.onShow(plugin.settings.$panel, $trigger);
 
     };
@@ -201,12 +207,12 @@
       if ( ! $trigger.hasClass( plugin.settings.prefix +'-trigger--is-active' ) )
         return;
 
-      // Move focus to trigger
+      // Move focus to trigger.
       $trigger
         .removeClass(plugin.settings.prefix +'-trigger--is-active')
         .attr('aria-expanded', false);
 
-      // Return focus
+      // Return focus.
       if ( plugin.settings.returnFocus === true)
         $trigger.focus();
 
@@ -219,7 +225,7 @@
 
         case 'slide' :
 
-      // Slide FX
+          // Slide FX.
         plugin.settings.$panel.slideUp('fast', function() {
           $(this).removeClass(plugin.settings.prefix + '-is-opened');
             plugin.settings.onShowEnd();
@@ -243,7 +249,7 @@
           console.log('Unknow mode.');
       }
 
-      // Callback function
+      // Callback function.
       plugin.settings.onHide( plugin.settings.$panel, $trigger );
 
     };
@@ -258,14 +264,14 @@
         event.preventDefault();
         event.stopPropagation();
 
-        // Close panel on click on active trigger
+        // Close panel on click on active trigger.
         if ( $(this).hasClass( plugin.settings.prefix +'-trigger--is-active' ) && plugin.settings.selfClose === true ) {
           plugin.settings.$panel.trigger('hide.tgp');
         }
         else {
 
 
-          // If panels are connected, close all
+          // If panels are connected, close all.
           if ( plugin.settings.connect ) {
             plugin.settings.wrapper.find('.'+ plugin.settings.prefix + '-panel')
             .trigger('hide.tgp');
@@ -284,7 +290,7 @@
     /** Attach events */
     var attachEvents = function () {
 
-      // Listen custom events & stop propagation (avoid <body>'s behavior)
+      // Listen custom events & stop propagation (avoid <body>'s behavior).
       plugin.settings.$panel
         .bind('no-autofocus.tgp', function(event) { plugin.settings.autoFocus = false; event.stopPropagation(); })
         .bind('show.tgp', function(event) { showPanel(); event.stopPropagation(); })
