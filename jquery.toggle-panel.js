@@ -17,6 +17,8 @@
       autoFocus: true,
       selfClose: true,
       returnFocus: true,
+      modal: false,
+      smallScreenBreakpoint: 767,
       onShow: function () {},
       onShowEnd: function () {},
       onHide: function () {},
@@ -24,7 +26,8 @@
     };
 
     var plugin = this,
-        $trigger = $(element);
+        $trigger = $(element),
+        $body = $('body');
 
     plugin.settings = {};
 
@@ -38,21 +41,23 @@
       // Get associated panel
       getPanel();
 
-      // Get first focusable element.
-      plugin.settings.focusableElementsFirst = plugin.settings.$panel.find('a, :input').first();
-
       // Small screen (mobile).
       plugin.settings.isSmallScreen = false;
-      if (window.innerWidth <= 767)
+      if (window.innerWidth <= plugin.settings.smallScreenBreakpoint)
         plugin.settings.isSmallScreen = true;
+
+
+      // Modal : Save focusable Elements.
+      plugin.settings.focusableElements = plugin.settings.$panel.find('a, :input');
+      plugin.settings.focusableElementsFirst = plugin.settings.focusableElements.first();
+      plugin.settings.focusableElementsLast = plugin.settings.focusableElements.last();
 
       initAttributes();
       attachEvents();
 
       // Open panels (stay closed on small screens).
       if ($trigger.data('tgp-opened') && plugin.settings.isSmallScreen === false) {
-        plugin.settings.$panel
-          .trigger('show.tgp');
+        plugin.settings.$panel.trigger('show.tgp');
       }
 
     };
@@ -292,9 +297,19 @@
 
       // Listen custom events & stop propagation (avoid <body>'s behavior).
       plugin.settings.$panel
-        .bind('no-autofocus.tgp', function(event) { plugin.settings.autoFocus = false; event.stopPropagation(); })
-        .bind('show.tgp', function(event) { showPanel(); event.stopPropagation(); })
-        .bind('hide.tgp', function(event) { hidePanel();  event.stopPropagation();});
+        .on('no-autofocus.tgp', function(event) { plugin.settings.autoFocus = false; event.stopPropagation(); })
+        .on('show.tgp', function(event) { showPanel(); event.stopPropagation(); })
+        .on('hide.tgp', function(event) { hidePanel();  event.stopPropagation();})
+        .on('keydown.tgp', function(event) {
+
+          event.stopPropagation();
+
+          // Hide panel with ESC key.
+          if (event.keyCode == 27) {
+            $(this).trigger('hide.tgp');
+          }
+
+        });
 
       attachTriggerEvents();
 

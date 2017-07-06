@@ -89,7 +89,7 @@ $('#trigger').togglePanel({
 Name                    | Type   | Description                                             | Default or options
 ------------------------|--------|---------------------------------------------------------|-------------------
 prefix                  | String | Generated classes prefix                                | 'tgp-'
-panel                   | String | the panel can be the next element or defined by its id  | 'id' / 'next' / 'function' (default: 'next')
+panel                   | String | the panel can be the next element or defined by its id  | 'id' (need data-tgp-panel-id attribute) / 'next' / 'function' (default: 'next')
 panelLabel              | String | Label for accessibility                                 | 'Panel'
 mode                    | String | 'toggle' / 'slide' / 'custom'                           | 'slide' / 'toggle' / 'custom' (default: 'slide')
 customShow & customHide | Method | If 'mode' setting = 'custom', this functions will be called | function() {}
