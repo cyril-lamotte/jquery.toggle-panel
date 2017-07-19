@@ -32,7 +32,6 @@ Plugin jQuery - Afficher un élément aprés un évènement sur un autre éléme
 ### 2. JavaScript
 
 ```js
-
 var openLabel = 'Déplier';
 var closeLabel = 'Replier';
 
@@ -44,7 +43,7 @@ $('#trigger').togglePanel({
   onShow: function($panel, $trigger) {
 
     // A11y : Update title & aria.
-    var btnText = " '" + $trigger.prev().text() + "'";
+    var btnText = " '" + $trigger.text() + "'";
 
     // Add title / aria-label.
     $trigger.attr({
@@ -56,7 +55,7 @@ $('#trigger').togglePanel({
   onHide: function($panel, $trigger) {
 
     // A11y : Update title & aria.
-    var btnText = " '" + $trigger.prev().text() + "'";
+    var btnText = " '" + $trigger.text() + "'";
 
     // Add title / aria-label.
     $trigger.attr({
@@ -94,7 +93,7 @@ panelLabel              | String | Label for accessibility                      
 mode                    | String | 'toggle' / 'slide' / 'custom'                           | 'slide' / 'toggle' / 'custom' (default: 'slide')
 customShow & customHide | Method | If 'mode' setting = 'custom', this functions will be called | function() {}
 wrapper                 | Object | Wrapper of connected panels                             | false
-connect                 | Bool   | If true, only one panel can be shown                    | false
+connect                 | Bool   | If true, only one panel can be shown (need wrapper setting) | false
 selfClose               | Bool   | Allow the trigger to close its panel                    | true
 autoFocus               | Bool   | Focus is moved to panel at opening                      | true
 returnFocus             | Bool   | Return focus to the trigger after closing               | true
