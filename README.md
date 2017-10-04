@@ -20,16 +20,31 @@ Plugin jQuery - Afficher un élément aprés un évènement sur un autre éléme
 ```
 
 ```html
+<!--"Next" way-->
 <button type="button" id="trigger">Toggle next element</button>
-<div id="panel-1" class="panel"></div>
+<div class="panel"></div>
 
+<!--"Id" way-->
 <button type="button" id="trigger" data-tgp-panel-id="panel-1" data-tgp-opened="true">Toggle id="panel-1"</button>
 <div id="panel-1" class="panel"></div>
 ```
 
 
+### 2. SCSS
 
-### 2. JavaScript
+```scss
+.panel {
+  display: none;
+
+  &.tgp--is-opened {
+    display: block;
+  }
+}
+
+```
+
+
+### 3. JavaScript
 
 ```js
 var openLabel = 'Déplier';
@@ -67,19 +82,6 @@ $('#trigger').togglePanel({
 });
 ```
 
-
-
-### 3. CSS
-
-```css
-.panel {
-  display: none;
-}
-
-.tgp--is-opened {
-  display: block;
-}
-```
 
 
 

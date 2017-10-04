@@ -35,10 +35,10 @@
     /** plugins initialisation */
     plugin.init = function () {
 
-      // Merge user's options
+      // Merge user's options.
       plugin.settings = $.extend({}, defaults, options);
 
-      // Get associated panel
+      // Get associated panel.
       getPanel();
 
       // Small screen (mobile).
@@ -274,7 +274,6 @@
           plugin.settings.$panel.trigger('hide.tgp');
         }
         else {
-
 
           // If panels are connected, close all.
           if ( plugin.settings.connect ) {
