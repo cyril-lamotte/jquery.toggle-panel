@@ -9,6 +9,7 @@
       wrapper: false,
       connect: false,
       panel: 'next',
+      event: 'click',
       findPanel: function() {},
       panelLabel: '',
       mode: 'slide',
@@ -264,7 +265,11 @@
     /** Attach trigger events */
     var attachTriggerEvents = function() {
 
-      $trigger.click(function (event) {
+      switch(plugin.settings.event) {
+
+        case 'click' :
+
+          $trigger.on(plugin.settings.event, function (event) {
 
         event.preventDefault();
         event.stopPropagation();
@@ -286,6 +291,25 @@
         }
 
       });
+
+          break;
+
+        case 'mouseover' :
+
+          $trigger.on('mouseenter', function (event) {
+
+            // If panels are connected, close all.
+            if (plugin.settings.connect) {
+              plugin.settings.wrapper.find('.'+ plugin.settings.prefix + '-panel')
+              .trigger('hide.tgp');
+            }
+
+            plugin.settings.$panel.trigger('show.tgp');
+
+          });
+
+          break;
+      }
 
     };
 
