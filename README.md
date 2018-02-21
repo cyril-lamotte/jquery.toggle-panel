@@ -40,7 +40,6 @@ Plugin jQuery - Afficher un élément aprés un évènement sur un autre éléme
     display: block;
   }
 }
-
 ```
 
 
@@ -53,6 +52,7 @@ var closeLabel = 'Replier';
 // Toggle panel.
 $('#trigger').togglePanel({
   panel: 'id',
+  event: 'click',
   autoFocus: false,
   panelLabel: 'Recherche',
   onShow: function($panel, $trigger) {
@@ -92,6 +92,7 @@ Name                    | Type   | Description                                  
 prefix                  | String | Generated classes prefix                                | 'tgp-'
 panel                   | String | the panel can be the next element or defined by its id  | 'id' (need data-tgp-panel-id attribute) / 'next' / 'function' (default: 'next')
 panelLabel              | String | Label for accessibility                                 | 'Panel'
+event                   | String | Type of event wich trigger action                       | 'click' / 'mousenter'  (default: 'click')
 mode                    | String | 'toggle' / 'slide' / 'custom'                           | 'slide' / 'toggle' / 'custom' (default: 'slide')
 customShow & customHide | Method | If 'mode' setting = 'custom', this functions will be called | function() {}
 wrapper                 | Object | Wrapper of connected panels                             | false
