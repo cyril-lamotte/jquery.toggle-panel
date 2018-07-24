@@ -192,7 +192,7 @@
           break;
 
         default:
-          console.log('Unknow mode.');
+          console.log('Unknown mode.');
       }
 
       // Move focus to panel.
@@ -271,26 +271,30 @@
 
           $trigger.on(plugin.settings.event, function (event) {
 
-        event.preventDefault();
-        event.stopPropagation();
+            // Avoid link's default behavior.
+            if (event.currentTarget.nodeName == 'A') {
+              event.preventDefault();
+            }
 
-        // Close panel on click on active trigger.
-        if ( $(this).hasClass( plugin.settings.prefix +'-trigger--is-active' ) && plugin.settings.selfClose === true ) {
-          plugin.settings.$panel.trigger('hide.tgp');
-        }
-        else {
+            event.stopPropagation();
 
-          // If panels are connected, close all.
-          if ( plugin.settings.connect ) {
-            plugin.settings.wrapper.find('.'+ plugin.settings.prefix + '-panel')
-            .trigger('hide.tgp');
-          }
+            // Close panel on click on active trigger.
+            if ( $(this).hasClass( plugin.settings.prefix +'-trigger--is-active' ) && plugin.settings.selfClose === true ) {
+              plugin.settings.$panel.trigger('hide.tgp');
+            }
+            else {
 
-          plugin.settings.$panel.trigger('show.tgp');
+              // If panels are connected, close all.
+              if ( plugin.settings.connect ) {
+                plugin.settings.wrapper.find('.'+ plugin.settings.prefix + '-panel')
+                .trigger('hide.tgp');
+              }
 
-        }
+              plugin.settings.$panel.trigger('show.tgp');
 
-      });
+            }
+
+          });
 
           break;
 
@@ -363,4 +367,3 @@
 
 
 })(jQuery);
-
