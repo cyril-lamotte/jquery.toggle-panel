@@ -20,6 +20,8 @@
       returnFocus: true,
       modal: false,
       smallScreenBreakpoint: 767,
+      closeLabel: 'Replier',
+      openLabel: 'Déplier',
       onShow: function () {},
       onShowEnd: function () {},
       onHide: function () {},
@@ -44,9 +46,9 @@
 
       // Small screen (mobile).
       plugin.settings.isSmallScreen = false;
-      if (window.innerWidth <= plugin.settings.smallScreenBreakpoint)
+      if (window.innerWidth <= plugin.settings.smallScreenBreakpoint) {
         plugin.settings.isSmallScreen = true;
-
+      }
 
       // Modal : Save focusable Elements.
       plugin.settings.focusableElements = plugin.settings.$panel.find('a, :input');
@@ -63,6 +65,10 @@
 
     };
 
+
+    /**
+     * Get panel from panel setting.
+     */
     var getPanel = function() {
 
       switch (plugin.settings.panel) {
@@ -77,8 +83,7 @@
           }
 
           // Add id attribute if not exist.
-          if (!plugin.settings.$panel.attr('id'))
-          {
+          if (!plugin.settings.$panel.attr('id')) {
             // Generate unique id.
             var uniqueId = generateId();
             plugin.settings.$panel.attr('id', 'tp-'+ uniqueId);
@@ -110,7 +115,12 @@
 
         default:
 
-          console.log('No panel content detected.');
+          // Use selector.
+          plugin.settings.$panel = $(plugin.settings.panel);
+
+          if (!plugin.settings.$panel.length || plugin.settings.$panel.length > 1) {
+            throw new Error('panel selector does not returns a unique element.');
+          }
 
       }
 
@@ -146,8 +156,9 @@
       });
 
 
-      if ( ! plugin.settings.panelLabel)
+      if (!plugin.settings.panelLabel) {
         plugin.settings.panelLabel = $trigger.text();
+      }
 
       plugin.settings.$panel.attr({
         'aria-hidden' : true,
@@ -155,13 +166,16 @@
         'aria-label' : plugin.settings.panelLabel
       });
 
+      // Update label.
+      updateARIAandTitle(plugin.settings.openLabel + " '" + $trigger.text() + "'");
+
     };
 
     /** Shows the panel */
     var showPanel = function() {
 
       // Active trigger.
-      $trigger.addClass( plugin.settings.prefix +'-trigger--is-active' )
+      $trigger.addClass(plugin.settings.prefix +'-trigger--is-active')
         .attr('aria-expanded', true);
 
       // Show panel.
@@ -187,7 +201,7 @@
         case 'custom' :
 
           // If "mode" setting equals to "custom", it needs customShow setting.
-        plugin.settings.$panel.addClass(plugin.settings.prefix + '-is-opened');
+          plugin.settings.$panel.addClass(plugin.settings.prefix + '-is-opened');
           plugin.settings.customShow(plugin.settings.$panel, $trigger);
 
           break;
@@ -201,6 +215,9 @@
         plugin.settings.focusableElementsFirst.focus();
       }
 
+      // Update label.
+      updateARIAandTitle(plugin.settings.closeLabel + " '" + $trigger.text() + "'");
+
       // Callback function.
       plugin.settings.onShow(plugin.settings.$panel, $trigger);
 
@@ -211,7 +228,7 @@
     /** Hides the panel */
     var hidePanel = function() {
 
-      if ( ! $trigger.hasClass( plugin.settings.prefix +'-trigger--is-active' ) )
+      if (!$trigger.hasClass(plugin.settings.prefix +'-trigger--is-active'))
         return;
 
       // Move focus to trigger.
@@ -220,7 +237,7 @@
         .attr('aria-expanded', false);
 
       // Return focus.
-      if ( plugin.settings.returnFocus === true)
+      if (plugin.settings.returnFocus === true)
         $trigger.focus();
 
 
@@ -256,11 +273,29 @@
           console.log('Unknow mode.');
       }
 
+      // Update label.
+      updateARIAandTitle(plugin.settings.openLabel + " '" + $trigger.text() + "'");
+
       // Callback function.
-      plugin.settings.onHide( plugin.settings.$panel, $trigger );
+      plugin.settings.onHide(plugin.settings.$panel, $trigger);
 
     };
 
+
+    /**
+     * Update aria-label & title attributes.
+     *
+     * @param {String} label - Label
+     */
+    var updateARIAandTitle = function(label) {
+
+      // Add title / aria-label.
+      $trigger.attr({
+        'aria-label' : label,
+        'title': label
+      });
+
+    };
 
 
     /** Attach trigger events */
@@ -280,13 +315,13 @@
             event.stopPropagation();
 
             // Close panel on click on active trigger.
-            if ( $(this).hasClass( plugin.settings.prefix +'-trigger--is-active' ) && plugin.settings.selfClose === true ) {
+            if ($(this).hasClass(plugin.settings.prefix +'-trigger--is-active' ) && plugin.settings.selfClose === true) {
               plugin.settings.$panel.trigger('hide.tgp');
             }
             else {
 
               // If panels are connected, close all.
-              if ( plugin.settings.connect ) {
+              if (plugin.settings.connect) {
                 plugin.settings.wrapper.find('.'+ plugin.settings.prefix + '-panel')
                 .trigger('hide.tgp');
               }
@@ -317,6 +352,22 @@
       }
 
 
+      // Hide with escape key.
+      $trigger.on('keydown.tgp', function(event) {
+
+        event.stopPropagation();
+
+        // Hide panel with ESC key.
+        if (event.keyCode == 27) {
+          plugin.settings.$panel.trigger('hide.tgp');
+        }
+
+      })
+
+      // Stop propagation on click.
+      .on('click', function(event) { event.stopPropagation(); });
+
+
       // Destroy all events & remove added classes and attributes.
       $trigger.on('destroy.tgp', function() {
 
@@ -339,6 +390,7 @@
 
       // Listen custom events & stop propagation (avoid <body>'s behavior).
       plugin.settings.$panel
+        .on('click', function(event) { event.stopPropagation(); })
         .on('no-autofocus.tgp', function(event) { plugin.settings.autoFocus = false; event.stopPropagation(); })
         .on('show.tgp', function(event) { showPanel(); event.stopPropagation(); })
         .on('hide.tgp', function(event) { hidePanel();  event.stopPropagation();})
@@ -353,11 +405,14 @@
 
         });
 
+      // Hide panels on body click.
+      $('body').on('click', function() {
+       plugin.settings.$panel.trigger('hide.tgp');
+      });
+
       attachTriggerEvents();
 
     };
-
-
 
     plugin.init();
 

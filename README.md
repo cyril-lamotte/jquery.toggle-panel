@@ -46,41 +46,36 @@ Plugin jQuery - Afficher un élément aprés un évènement sur un autre éléme
 ### 3. JavaScript
 
 ```js
-var openLabel = 'Déplier';
-var closeLabel = 'Replier';
-
 // Toggle panel.
 $('#trigger').togglePanel({
   panel: 'id',
   event: 'click',
   autoFocus: false,
-  panelLabel: 'Recherche',
-  onShow: function($panel, $trigger) {
+  panelLabel: 'Recherche'
+});
+```
 
-    // A11y : Update title & aria.
-    var btnText = " '" + $trigger.text() + "'";
 
-    // Add title / aria-label.
-    $trigger.attr({
-      'aria-label' : closeLabel + btnText,
-      'title': closeLabel + btnText
+```js
+// Absolute positionning.
+$('#trigger').togglePanel({
+  panel: 'id',
+  event: 'click',
+  mode: 'custom',
+  customShow: function($panel, $trigger) {
+
+    $panel.position({
+      of: $trigger,
+      my: 'left top',
+      at: 'left bottom'
     });
 
   },
-  onHide: function($panel, $trigger) {
-
-    // A11y : Update title & aria.
-    var btnText = " '" + $trigger.text() + "'";
-
-    // Add title / aria-label.
-    $trigger.attr({
-      'aria-label' : openLabel + btnText,
-      'title': openLabel + btnText
-    });
-
-  }
+  autoFocus: false,
+  panelLabel: 'Recherche'
 });
 ```
+
 
 
 
@@ -90,10 +85,10 @@ $('#trigger').togglePanel({
 Name                    | Type   | Description                                             | Default or options
 ------------------------|--------|---------------------------------------------------------|-------------------
 prefix                  | String | Generated classes prefix                                | 'tgp-'
-panel                   | String | the panel can be the next element or defined by its id  | 'id' (need data-tgp-panel-id attribute) / 'next' / 'function' (default: 'next')
+panel                   | String | the panel can be the next element or defined by its id  | 'id' (need data-tgp-panel-id attribute) / 'next' / 'function' / selector (default: 'next')
 panelLabel              | String | Label for accessibility                                 | 'Panel'
 event                   | String | Type of event wich trigger action                       | 'click' / 'mousenter'  (default: 'click')
-mode                    | String | 'toggle' / 'slide' / 'custom'                           | 'slide' / 'toggle' / 'custom' (default: 'slide')
+mode                    | String | Apparition mode                                         | 'slide' / 'toggle' / 'custom' (default: 'slide')
 customShow & customHide | Method | If 'mode' setting = 'custom', this functions will be called | function($panel, $trigger) {}
 wrapper                 | Object | Wrapper of connected panels                             | false
 connect                 | Bool   | If true, only one panel can be shown (need wrapper setting) | false
