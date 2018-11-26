@@ -113,4 +113,5 @@ Name                 | Description
 no-autofocus.tgp     | Remove autofocus after initialisation
 show.tgp             | Show panel
 hide.tgp             | Hide panel
+destroy.tgp          | Remove all events and generated HTML.
 

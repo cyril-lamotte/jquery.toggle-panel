@@ -128,6 +128,7 @@
       return id;
     };
 
+
     /** Insert ARIA & classes attributes */
     var initAttributes = function() {
 
@@ -269,7 +270,7 @@
 
         case 'click' :
 
-          $trigger.on(plugin.settings.event, function (event) {
+          $trigger.on(plugin.settings.event + '.tgp', function (event) {
 
             // Avoid link's default behavior.
             if (event.currentTarget.nodeName == 'A') {
@@ -300,7 +301,7 @@
 
         case 'mouseover' :
 
-          $trigger.on('mouseenter', function (event) {
+          $trigger.on('mouseenter.tgp', function (event) {
 
             // If panels are connected, close all.
             if (plugin.settings.connect) {
@@ -314,6 +315,20 @@
 
           break;
       }
+
+
+      // Destroy all events & remove added classes and attributes.
+      $trigger.on('destroy.tgp', function() {
+
+        $trigger.off('.tgp');
+        plugin.settings.$panel.off('.tgp');
+
+        $trigger.add(plugin.settings.$panel)
+          .removeData('togglePanel')
+          .removeClass('tgp--trigger tgp--trigger--is-active tgp--panel tgp--is-opened')
+          .removeAttr('title role aria-hidden aria-expanded aria-label');
+
+      });
 
     };
 
