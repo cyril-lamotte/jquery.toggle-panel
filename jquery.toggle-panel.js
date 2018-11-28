@@ -1,6 +1,5 @@
 (function ($) {
 
-
   $.togglePanel = function (element, options) {
 
     // Default options
@@ -19,6 +18,8 @@
       selfClose: true,
       returnFocus: true,
       modal: false,
+      disableFirstLevel: false,
+      removeTitle: false,
       smallScreenBreakpoint: 767,
       closeLabel: 'Replier',
       openLabel: 'Déplier',
@@ -289,11 +290,19 @@
      */
     var updateARIAandTitle = function(label) {
 
-      // Add title / aria-label.
+      // Add aria-label.
       $trigger.attr({
-        'aria-label' : label,
-        'title': label
+        'aria-label' : label
       });
+
+      if (!plugin.settings.removeTitle) {
+
+        // Add title.
+        $trigger.attr({
+          'title': label
+        });
+
+      }
 
     };
 
@@ -365,7 +374,15 @@
       })
 
       // Stop propagation on click.
-      .on('click', function(event) { event.stopPropagation(); });
+      .on('click', function(event) {
+        event.stopPropagation();
+
+        // First level is disable.
+        if (plugin.settings.disableFirstLevel) {
+          event.preventDefault();
+        }
+
+      });
 
 
       // Destroy all events & remove added classes and attributes.
@@ -419,7 +436,6 @@
   };
 
 
-
   $.fn.togglePanel = function (options) {
 
     return this.each(function () {
@@ -432,8 +448,5 @@
     });
 
   };
-
-
-
 
 })(jQuery);

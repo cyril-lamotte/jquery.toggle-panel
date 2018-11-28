@@ -82,22 +82,24 @@ $('#trigger').togglePanel({
 
 ### 4. Options
 
-Name                    | Type   | Description                                             | Default or options
-------------------------|--------|---------------------------------------------------------|-------------------
-prefix                  | String | Generated classes prefix                                | 'tgp-'
-panel                   | String | the panel can be the next element or defined by its id  | 'id' (need data-tgp-panel-id attribute) / 'next' / 'function' / selector (default: 'next')
-panelLabel              | String | Label for accessibility                                 | 'Panel'
-event                   | String | Type of event wich trigger action                       | 'click' / 'mousenter'  (default: 'click')
-mode                    | String | Apparition mode                                         | 'slide' / 'toggle' / 'custom' (default: 'slide')
+Name                    | Type   | Description                                                 | Default or options
+------------------------|--------|-------------------------------------------------------------|-------------------
+prefix                  | String | Generated classes prefix                                    | 'tgp-'
+panel                   | String | the panel can be the next element or defined by its id      | 'id' (need data-tgp-panel-id attribute) / 'next' / 'function' / selector (default: 'next')
+panelLabel              | String | Label for accessibility                                     | 'Panel'
+event                   | String | Type of event wich trigger action                           | 'click' / 'mousenter'  (default: 'click')
+mode                    | String | Apparition mode                                             | 'slide' / 'toggle' / 'custom' (default: 'slide')
 customShow & customHide | Method | If 'mode' setting = 'custom', this functions will be called | function($panel, $trigger) {}
-wrapper                 | Object | Wrapper of connected panels                             | false
+wrapper                 | Object | Wrapper of connected panels                                 | false
 connect                 | Bool   | If true, only one panel can be shown (need wrapper setting) | false
-selfClose               | Bool   | Allow the trigger to close its panel                    | true
-autoFocus               | Bool   | Focus is moved to panel at opening                      | true
-returnFocus             | Bool   | Return focus to the trigger after closing               | true
-onShow()                | Method | Do stuff after showing                                  | function($panel, $trigger) {}
-onShowEnd() & onHideEnd | Method | Do stuff after sliding FX                               | function($panel, $trigger) {}
-onHide()                | Method | Do stuff after hiding                                   | function($panel, $trigger) {}
+selfClose               | Bool   | Allow the trigger to close its panel                        | true
+removetitle             | Bool   | Disable titles on triggers                                  | true
+disableFirstLevel       | Bool   | Disable clicks on the first levels (don't follow the links) | true
+autoFocus               | Bool   | Focus is moved to panel at opening                          | true
+returnFocus             | Bool   | Return focus to the trigger after closing                   | true
+onShow()                | Method | Do stuff after showing                                      | function($panel, $trigger) {}
+onShowEnd() & onHideEnd | Method | Do stuff after sliding FX                                   | function($panel, $trigger) {}
+onHide()                | Method | Do stuff after hiding                                       | function($panel, $trigger) {}
 findPanel()             | Method | If 'panel' setting = "function", this function will be called, must return a valid element (the content panel) | function() {}
 
 
