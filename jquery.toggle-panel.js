@@ -317,7 +317,7 @@
           $trigger.on(plugin.settings.event + '.tgp', function (event) {
 
             // Avoid link's default behavior.
-            if (event.currentTarget.nodeName == 'A') {
+            if (event.currentTarget.nodeName === 'A') {
               event.preventDefault();
             }
 
@@ -367,7 +367,7 @@
         event.stopPropagation();
 
         // Hide panel with ESC key.
-        if (event.keyCode == 27) {
+        if (event.keyCode === 27) {
           plugin.settings.$panel.trigger('hide.tgp');
         }
 
@@ -416,7 +416,7 @@
           event.stopPropagation();
 
           // Hide panel with ESC key.
-          if (event.keyCode == 27) {
+          if (event.keyCode === 27) {
             $(this).trigger('hide.tgp');
           }
 
