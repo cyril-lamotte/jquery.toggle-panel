@@ -87,7 +87,7 @@ Name                    | Type   | Description                                  
 prefix                  | String | Generated classes prefix                                    | 'tgp-'
 panel                   | String | the panel can be the next element or defined by its id      | 'id' (need data-tgp-panel-id attribute) / 'next' / 'function' / selector (default: 'next')
 panelLabel              | String | Label for accessibility                                     | 'Panel'
-event                   | String | Type of event wich trigger action                           | 'click' / 'mousenter'  (default: 'click')
+event                   | String | Type of event wich trigger action                           | 'click' / 'mouseover'  (default: 'click')
 mode                    | String | Apparition mode                                             | 'slide' / 'toggle' / 'custom' (default: 'slide')
 customShow & customHide | Method | If 'mode' setting = 'custom', this functions will be called | function($panel, $trigger) {}
 wrapper                 | Object | Wrapper of connected panels                                 | false
