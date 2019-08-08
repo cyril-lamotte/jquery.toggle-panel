@@ -4,7 +4,7 @@
 
     // Default options
     var defaults = {
-      prefix : 'tgp-',
+      prefix : 'tgp',
       wrapper: false,
       connect: false,
       panel: 'next',
@@ -17,6 +17,8 @@
       autoFocus: true,
       selfClose: true,
       returnFocus: true,
+      autoHide: false,
+      delay: 300,
       modal: false,
       disableFirstLevel: false,
       removeTitle: false,
@@ -30,8 +32,7 @@
     };
 
     var plugin = this,
-        $trigger = $(element),
-        $body = $('body');
+        $trigger = $(element);
 
     plugin.settings = {};
 
@@ -87,7 +88,7 @@
           if (!plugin.settings.$panel.attr('id')) {
             // Generate unique id.
             var uniqueId = generateId();
-            plugin.settings.$panel.attr('id', 'tp-'+ uniqueId);
+            plugin.settings.$panel.attr('id', 'tgp-'+ uniqueId);
           }
 
           break;
@@ -95,8 +96,9 @@
         case 'id':
 
           // Trigger has 'tgp-panel-id' attributes with panel id.
-          if (!$trigger.data('tgp-panel-id'))
+          if (!$trigger.data('tgp-panel-id')) {
             throw new Error('Missing attribute "data-tgp-panel-id".');
+          }
 
           plugin.settings.$panel = $('#'+ $trigger.data('tgp-panel-id'));
 
@@ -144,11 +146,11 @@
     var initAttributes = function() {
 
       // Add classes.
-      $trigger.addClass(plugin.settings.prefix +'-trigger');
-      plugin.settings.$panel.addClass(plugin.settings.prefix +'-panel');
+      $trigger.addClass(plugin.settings.prefix + '__trigger');
+      plugin.settings.$panel.addClass(plugin.settings.prefix + '__panel');
 
       if (plugin.settings.wrapper.length)
-        plugin.settings.wrapper.addClass(plugin.settings.prefix +'-wrapper');
+        plugin.settings.wrapper.addClass(plugin.settings.prefix + '__wrapper');
 
       // Add attributes.
       $trigger.attr({
@@ -176,7 +178,7 @@
     var showPanel = function() {
 
       // Active trigger.
-      $trigger.addClass(plugin.settings.prefix +'-trigger--is-active')
+      $trigger.addClass(plugin.settings.prefix + '__trigger--is-active')
         .attr('aria-expanded', true);
 
       // Show panel.
@@ -189,20 +191,20 @@
 
         // Slide FX.
         plugin.settings.$panel.slideDown('fast', function() {
-          $(this).addClass(plugin.settings.prefix + '-is-opened');
+          $(this).addClass(plugin.settings.prefix + '__panel--is-opened');
           plugin.settings.onShowEnd();
         });
 
         break;
 
         case 'toggle' :
-          plugin.settings.$panel.addClass(plugin.settings.prefix + '-is-opened');
+          plugin.settings.$panel.addClass(plugin.settings.prefix + '__panel--is-opened');
         break;
 
         case 'custom' :
 
           // If "mode" setting equals to "custom", it needs customShow setting.
-          plugin.settings.$panel.addClass(plugin.settings.prefix + '-is-opened');
+          plugin.settings.$panel.addClass(plugin.settings.prefix + '__panel--is-opened');
           plugin.settings.customShow(plugin.settings.$panel, $trigger);
 
           break;
@@ -229,12 +231,12 @@
     /** Hides the panel */
     var hidePanel = function() {
 
-      if (!$trigger.hasClass(plugin.settings.prefix +'-trigger--is-active'))
+      if (!$trigger.hasClass(plugin.settings.prefix + '__trigger--is-active'))
         return;
 
       // Move focus to trigger.
       $trigger
-        .removeClass(plugin.settings.prefix +'-trigger--is-active')
+        .removeClass(plugin.settings.prefix + '__trigger--is-active')
         .attr('aria-expanded', false);
 
       // Return focus.
@@ -252,20 +254,20 @@
 
           // Slide FX.
         plugin.settings.$panel.slideUp('fast', function() {
-          $(this).removeClass(plugin.settings.prefix + '-is-opened');
+          $(this).removeClass(plugin.settings.prefix + '__panel--is-opened');
             plugin.settings.onShowEnd();
         });
 
         break;
 
         case 'toggle' :
-        plugin.settings.$panel.removeClass(plugin.settings.prefix + '-is-opened');
+        plugin.settings.$panel.removeClass(plugin.settings.prefix + '__panel--is-opened');
         break;
 
         case 'custom' :
 
           // If "mode" setting equals to "custom", it needs customShow setting.
-          plugin.settings.$panel.removeClass(plugin.settings.prefix + '-is-opened');
+          plugin.settings.$panel.removeClass(plugin.settings.prefix + '__panel--is-opened');
           plugin.settings.customHide(plugin.settings.$panel, $trigger);
 
           break;
@@ -279,6 +281,23 @@
 
       // Callback function.
       plugin.settings.onHide(plugin.settings.$panel, $trigger);
+
+    };
+
+
+    var hidePanelWithTimeout = function() {
+
+      if (!plugin.settings.autoHide) {
+        return false;
+      }
+
+      plugin.timeoutID = window.setTimeout(function() {
+
+        if (!plugin.settings.$panel.data('flag-hover')) {
+          plugin.settings.$panel.trigger('hide.tgp');
+        }
+
+      }, plugin.settings.delay);
 
     };
 
@@ -324,14 +343,14 @@
             event.stopPropagation();
 
             // Close panel on click on active trigger.
-            if ($(this).hasClass(plugin.settings.prefix +'-trigger--is-active' ) && plugin.settings.selfClose === true) {
+            if ($(this).hasClass(plugin.settings.prefix + '__trigger--is-active' ) && plugin.settings.selfClose === true) {
               plugin.settings.$panel.trigger('hide.tgp');
             }
             else {
 
               // If panels are connected, close all.
               if (plugin.settings.connect) {
-                plugin.settings.wrapper.find('.'+ plugin.settings.prefix + '-panel')
+                plugin.settings.wrapper.find('.'+ plugin.settings.prefix + '__panel')
                 .trigger('hide.tgp');
               }
 
@@ -347,9 +366,11 @@
 
           $trigger.on('mouseenter.tgp', function (event) {
 
+            clearTimeout(plugin.timeoutID);
+
             // If panels are connected, close all.
             if (plugin.settings.connect) {
-              plugin.settings.wrapper.find('.'+ plugin.settings.prefix + '-panel')
+              plugin.settings.wrapper.find('.'+ plugin.settings.prefix + '__panel')
               .trigger('hide.tgp');
             }
 
@@ -393,8 +414,8 @@
 
         $trigger.add(plugin.settings.$panel)
           .removeData('togglePanel')
-          .removeClass('tgp--trigger tgp--trigger--is-active tgp--panel tgp--is-opened')
-          .removeAttr('title role aria-hidden aria-expanded aria-label');
+          .removeClass('tgp__trigger tgp__trigger--is-active tgp__panel tgp__panel--is-opened')
+          .removeAttr('title role aria-hidden aria-expanded aria-label aria-controls');
 
       });
 
@@ -411,6 +432,13 @@
         .on('no-autofocus.tgp', function(event) { plugin.settings.autoFocus = false; event.stopPropagation(); })
         .on('show.tgp', function(event) { showPanel(); event.stopPropagation(); })
         .on('hide.tgp', function(event) { hidePanel();  event.stopPropagation();})
+        .on('mouseenter.tgp', function(event) {
+          plugin.settings.$panel.data('flag-hover', true);
+          clearTimeout(plugin.timeoutID);
+          event.stopPropagation();
+        })
+        .on('mouseleave.tgp', function(event) { hidePanelWithTimeout(); plugin.settings.$panel.data('flag-hover', false);  event.stopPropagation();})
+        .on('hideWithTimeout.tgp', function(event) { hidePanelWithTimeout();  event.stopPropagation();})
         .on('keydown.tgp', function(event) {
 
           event.stopPropagation();
@@ -424,8 +452,15 @@
 
       // Hide panels on body click.
       $('body').on('click', function() {
-       plugin.settings.$panel.trigger('hide.tgp');
+        plugin.settings.$panel.trigger('hide.tgp');
       });
+
+      // Hide panels when wrapper is left.
+      if (plugin.settings.wrapper) {
+        plugin.settings.wrapper.on('mouseleave.tgp', function() {
+          plugin.settings.$panel.trigger('hideWithTimeout.tgp');
+        });
+      }
 
       attachTriggerEvents();
 

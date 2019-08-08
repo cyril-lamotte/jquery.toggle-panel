@@ -9,8 +9,6 @@ Plugin jQuery - Afficher un élément aprés un évènement sur un autre éléme
 * ARIA
 
 
-
-
 ## Installation
 
 ### 1. Join plugin
@@ -36,7 +34,7 @@ Plugin jQuery - Afficher un élément aprés un évènement sur un autre éléme
 .panel {
   display: none;
 
-  &.tgp--is-opened {
+  &.tgp__panel--is-opened {
     display: block;
   }
 }
@@ -97,6 +95,8 @@ removetitle             | Bool   | Disable titles on triggers                   
 disableFirstLevel       | Bool   | Disable clicks on the first levels (don't follow the links) | true
 autoFocus               | Bool   | Focus is moved to panel at opening                          | true
 returnFocus             | Bool   | Return focus to the trigger after closing                   | true
+autoHide                | Bool   | Close panel after mouse leaving with delay                  | false
+delay                   | Bool   | Delay for auto-hiding                                       | 300
 onShow()                | Method | Do stuff after showing                                      | function($panel, $trigger) {}
 onShowEnd() & onHideEnd | Method | Do stuff after sliding FX                                   | function($panel, $trigger) {}
 onHide()                | Method | Do stuff after hiding                                       | function($panel, $trigger) {}

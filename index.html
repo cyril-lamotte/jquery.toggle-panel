@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<!--[if lte IE 7]><html lang="fr" class="ie7 lte-ie8"><![endif]-->
-<!--[if IE 8]><html lang="fr" class="ie8 lte-ie8"><![endif]-->
-<!--[if IE 9]><html lang="fr" class="ie9"><![endif]-->
-<!--[if gt IE 9]><!--><html lang="fr"><!--<![endif]-->
+<html lang="fr">
 <head>
 
   <!-- Définir le mode de compatibilité Internet Explorer -->
@@ -13,11 +10,7 @@
   <!-- Définir le niveau de zoom -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Ne pas autoriser la détection des numéro de téléphone -->
-  <meta name="format-detection" content="telephone=no">
-
-  <title>TogglePanel</title>
-
+  <title>jQuery TogglePanel</title>
 
   <style>
 
@@ -25,7 +18,7 @@
       display: none;
     }
 
-    .tgp--is-opened {
+    .tgp__panel--is-opened {
       display: block !important;
     }
 
@@ -42,7 +35,7 @@
 
   <header class="main-header">
 
-    <h1 class="main-title">TogglePanel</h1>
+    <h1 class="main-title">jQuery TogglePanel</h1>
 
   </header>
 
@@ -61,6 +54,7 @@
 
       <hr>
 
+      <button type="button" id="destroy">Destroy all</button>
 
     </main>
 
@@ -73,7 +67,10 @@
 </div><!--/outer-wrap-->
 
 <!-- Scripts at the bottom for better performances -->
-<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
 <script src="jquery.toggle-panel.js"></script>
 <script>
 
@@ -90,6 +87,10 @@ $(document).ready(function() {
     panel: 'id',
     autoFocus: false,
     mode: 'toggle'
+  });
+
+  $('#destroy').on('click', function() {
+    $('button[id^=trigger]').trigger('destroy.tgp');
   });
 
 }); // /ready
