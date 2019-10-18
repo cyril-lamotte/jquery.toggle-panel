@@ -160,7 +160,7 @@
 
 
       if (!plugin.settings.panelLabel) {
-        plugin.settings.panelLabel = $trigger.text();
+        plugin.settings.panelLabel = $trigger.text().trim();
       }
 
       plugin.settings.$panel.attr({
@@ -170,7 +170,7 @@
       });
 
       // Update label.
-      updateARIAandTitle(plugin.settings.openLabel + " '" + $trigger.text() + "'");
+      updateARIAandTitle(plugin.settings.openLabel + " '" + $trigger.text().trim() + "'");
 
     };
 
@@ -219,7 +219,7 @@
       }
 
       // Update label.
-      updateARIAandTitle(plugin.settings.closeLabel + " '" + $trigger.text() + "'");
+      updateARIAandTitle(plugin.settings.closeLabel + " '" + $trigger.text().trim() + "'");
 
       // Callback function.
       plugin.settings.onShow(plugin.settings.$panel, $trigger);
