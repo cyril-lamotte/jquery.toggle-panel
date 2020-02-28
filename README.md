@@ -1,4 +1,4 @@
-
+![Licence](https://img.shields.io/github/license/cyril-lamotte/jquery.toggle-panel)
 ![Top language](https://img.shields.io/github/languages/top/cyril-lamotte/jquery.toggle-panel)
 
 # jQuery toggle-panel
