@@ -1,3 +1,5 @@
+[https://img.shields.io/github/languages/top/cyril-lamotte/jquery.toggle-panel]
+
 # jQuery toggle-panel
 
 Plugin jQuery - Afficher un élément aprés un évènement sur un autre élément
