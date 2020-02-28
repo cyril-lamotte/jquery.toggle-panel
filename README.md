@@ -10,7 +10,7 @@ Plugin jQuery - Afficher un élément aprés un évènement sur un autre éléme
 
 ## Features
 
-* IE8+ compliant
+* IE11+ compliant
 * ARIA
 
 
