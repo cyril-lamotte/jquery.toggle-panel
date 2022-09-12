@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+  <!-- Définir le mode de compatibilité Internet Explorer -->
+  <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+
+  <meta charset="utf-8">
+
+  <!-- Définir le niveau de zoom -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>jQuery TogglePanel</title>
+
+  <style>
+
+    .panel {
+      display: none;
+    }
+
+    .tgp__panel--is-opened {
+      display: block !important;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="outer-wrap">
+<div class="wrapper">
+
+
+
+  <header class="main-header">
+
+    <h1 class="main-title">jQuery TogglePanel</h1>
+
+  </header>
+
+
+  <div class="page">
+
+    <main id="a_content">
+
+      <div id="wrapper">
+        <div>
+          <button type="button" id="trigger-1">Toggle next element</button>
+          <div id="panel-1" class="panel">1 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus nobis odio pariatur incidunt. Praesentium explicabo quidem doloribus at debitis a quod magnam dolores, quo impedit! Ullam consequuntur ab corrupti quisquam!</div>
+        </div>
+
+        <div>
+          <button type="button" id="trigger-2">Toggle next element</button>
+          <div id="panel-2" class="panel">2 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus nobis odio pariatur incidunt. Praesentium explicabo quidem doloribus at debitis a quod magnam dolores, quo impedit! Ullam consequuntur ab corrupti quisquam!</div>
+        </div>
+
+        <div>
+          <button type="button" id="trigger-3">Toggle next element</button>
+          <div id="panel-3" class="panel">3 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus nobis odio pariatur incidunt. Praesentium explicabo quidem doloribus at debitis a quod magnam dolores, quo impedit! Ullam consequuntur ab corrupti quisquam!</div>
+        </div>
+      </div>
+
+    </main>
+
+
+
+  </div><!--/page-->
+
+
+</div><!--/wrapper-->
+</div><!--/outer-wrap-->
+
+<!-- Scripts at the bottom for better performances -->
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<script src="jquery.toggle-panel.js"></script>
+<script>
+
+(function ($) {
+
+/* Execute code when the DOM is fully loaded */
+$(document).ready(function() {
+
+  // Display/Hide panels
+  $('button').togglePanel({
+    panel: 'next',
+    mode: 'toggle',
+    wrapper: $('#wrapper'),
+    connect: true,
+  });
+
+}); // /ready
+
+
+})(jQuery);
+
+</script>
+
+</body>
+</html>
